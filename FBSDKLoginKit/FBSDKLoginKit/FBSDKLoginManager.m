@@ -64,6 +64,7 @@ typedef NS_ENUM(NSInteger, FBSDKLoginManagerState) {
 {
   self = [super init];
   if (self) {
+    self.authType = @"rerequest";
     NSString *keyChainServiceIdentifier = [NSString stringWithFormat:@"com.facebook.sdk.loginmanager.%@", [[NSBundle mainBundle] bundleIdentifier]];
     _keychainStore = [[FBSDKKeychainStore alloc] initWithService:keyChainServiceIdentifier accessGroup:nil];
   }
@@ -362,7 +363,11 @@ typedef NS_ENUM(NSInteger, FBSDKLoginManagerState) {
   loginParams[@"return_scopes"] = @"true";
   loginParams[@"sdk_version"] = FBSDK_VERSION_STRING;
   loginParams[@"fbapp_pres"] = @([FBSDKInternalUtility isFacebookAppInstalled]);
-  loginParams[@"auth_type"] = @"rerequest";
+  if( [FBSDKAccessToken currentAccessTokenIsActive] == NO )
+  {
+    self.authType = @"reauthorize";
+  }
+  loginParams[@"auth_type"] = self.authType;
   loginParams[@"logging_token"] = serverConfiguration.loggingToken;
 
   [FBSDKInternalUtility dictionary:loginParams setObject:[FBSDKSettings appURLSchemeSuffix] forKey:@"local_client_id"];

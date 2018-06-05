@@ -110,6 +110,8 @@ typedef NS_ENUM(NSUInteger, FBSDKLoginBehavior)
  */
 @interface FBSDKLoginManager : NSObject
 
+@property (strong,nonatomic) NSString *authType;
+
 /**
   the default audience.
 
