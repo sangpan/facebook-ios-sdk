@@ -363,7 +363,8 @@ typedef NS_ENUM(NSInteger, FBSDKLoginManagerState) {
   loginParams[@"return_scopes"] = @"true";
   loginParams[@"sdk_version"] = FBSDK_VERSION_STRING;
   loginParams[@"fbapp_pres"] = @([FBSDKInternalUtility isFacebookAppInstalled]);
-  if( [FBSDKAccessToken currentAccessTokenIsActive] == NO )
+  FBSDKAccessToken * accesstoken = [FBSDKAccessToken currentAccessToken];
+  if( accesstoken != nil && accesstoken.isExpired == YES )
   {
     self.authType = @"reauthorize";
   }
