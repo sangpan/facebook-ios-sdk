@@ -23,9 +23,11 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb133094273807591</string>
+				<string>fb1809615065921877</string>
 				<string>ak133094273807591</string>
 			</array>
 		</dict>
@@ -33,7 +35,9 @@
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>FacebookAppID</key>
-	<string>133094273807591</string>
+	<string>1809615065921877</string>
+	<key>FacebookAutoInitEnabled</key>
+	<true/>
 	<key>FacebookDisplayName</key>
 	<string>Login Sample</string>
 	<key>LSApplicationQueriesSchemes</key>

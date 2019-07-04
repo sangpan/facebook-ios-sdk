@@ -21,9 +21,9 @@
 #import <AccountKit/AccountKit.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
-#import <Tweaks/FBTweakInline.h>
-#import <Tweaks/FBTweakStore.h>
-#import <Tweaks/FBTweakViewController.h>
+#import "FBTweak/FBTweakInline.h"
+#import "FBTweak/FBTweakStore.h"
+#import "FBTweak/FBTweakViewController.h"
 
 #import "LoggedInViewController.h"
 #import "SettingsUtil.h"
@@ -107,9 +107,20 @@
 
 - (void)loginWithPhone
 {
-  UIViewController<AKFViewController> *vc = [_accountKit viewControllerForPhoneLogin];
-  [self prepareAKLoginViewController:vc];
-  [self presentViewController:vc animated:YES completion:nil];
+	FBSDKLoginManager *loginManager	= [[FBSDKLoginManager alloc] init];
+	loginManager.loginBehavior	= FBSDKLoginBehaviorBrowser;
+	NSArray *requiredPermissions	= @[@"public_profile", @"user_friends"];
+	
+	[loginManager  logInWithPermissions:requiredPermissions fromViewController:self handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+		// iOS 9.3 에서 Callback 호출 되지 않음
+		if (error == nil && !result.isCancelled) {
+			[self proceedToMainScreen:YES];
+		}
+	}];
+
+//  UIViewController<AKFViewController> *vc = [_accountKit viewControllerForPhoneLogin];
+//  [self prepareAKLoginViewController:vc];
+//  [self presentViewController:vc animated:YES completion:nil];
 }
 
 - (void)openSettings
@@ -146,7 +157,7 @@
   _fbButton.delegate = self;
   [self.view addSubview:_fbButton];
 
-  _phoneButton = [self createButtonWithTitle:@"Log in with Phone" color:[UIColor colorWithRed: 77.0/255.0 green:194.0/255.0 blue:71.0/255.0 alpha:1]];
+  _phoneButton = [self createButtonWithTitle:@"Log in (Trouble by LoginManager)" color:[UIColor colorWithRed: 77.0/255.0 green:194.0/255.0 blue:71.0/255.0 alpha:1]];
   [_phoneButton addTarget:self action:@selector(loginWithPhone) forControlEvents:UIControlEventTouchUpInside];
   [self.view addSubview:_phoneButton];
 
